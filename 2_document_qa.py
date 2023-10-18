@@ -11,35 +11,44 @@ from langchain.chains import RetrievalQAWithSourcesChain
 from langchain.chat_models import ChatOpenAI
 import chainlit as cl
 from chainlit.types import AskFileResponse
-
-
-
+import os
 
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
-embeddings = OpenAIEmbeddings()
+
+embeddings = OpenAIEmbeddings(openai_api_key="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")
+os.environ['OPENAI_API_KEY']="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"
 
 welcome_message = """Welcome to the Chainlit PDF QA demo! To get started:
 1. Upload a PDF or text file
 2. Ask a question about the file
 """
 
+import tempfile
 
 def process_file(file: AskFileResponse):
-    import tempfile
-
     if file.type == "text/plain":
         Loader = TextLoader
     elif file.type == "application/pdf":
         Loader = PyPDFLoader
 
-    with tempfile.NamedTemporaryFile() as tempfile:
-        tempfile.write(file.content)
-        loader = Loader(tempfile.name)
-        documents = loader.load()
-        docs = text_splitter.split_documents(documents)
-        for i, doc in enumerate(docs):
-            doc.metadata["source"] = f"source_{i}"
-        return docs
+    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+        temp_file.write(file.content)
+        temp_file_path = temp_file.name  # Get the path of the temporary file
+        loader = Loader(temp_file_path)
+
+    documents = loader.load()
+    docs = text_splitter.split_documents(documents)
+
+    for i, doc in enumerate(docs):
+        doc.metadata["source"] = f"source_{i}"
+
+    return docs
+
+
+
+
+
+
 
 
 def get_docsearch(file: AskFileResponse):

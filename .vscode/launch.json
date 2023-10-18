@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Streamlit",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/2_document_qa.py",
+            "args": ["run", "--browser.serverAddress", "0.0.0.0", "--browser.serverPort", "8000"],
+            "console": "integratedTerminal",
+            "env": {
+                "STREAMLIT_SERVER_ON" : "false"
+            }
+        }
+    ]
+}

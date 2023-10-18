@@ -1,3 +1,4 @@
+#export HNSWLIB_NO_NATIVE=1
 import chromadb
 
 chroma_client = chromadb.Client()
@@ -16,3 +17,5 @@ results = collections.query(
 )
 
 print(results)
+
+#Clear Cache: Sometimes, cached files can become corrupted. You can try clearing the cache for chromadb by deleting the contents of the C:\Users\user-upcnb00067\.cache\chroma\ directory. Afterward, rerun your code, and the library should attempt to redownload or regenerate the necessary files.

@@ -2,6 +2,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.agents import load_tools, initialize_agent, AgentType
 import os
 
+os.environ['OPENAI_API_KEY']="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"
 
 #If the parser is erroring out, remember to set temperature to a higher value!!!
 
@@ -22,5 +23,5 @@ agent_chain = initialize_agent(
 )
 
 agent_chain.run(
-    "what is RLHF?",
+    "who is RLHF?",
 )
