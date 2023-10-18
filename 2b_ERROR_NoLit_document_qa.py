@@ -14,8 +14,8 @@ import chainlit as cl
 
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
 
-embeddings = OpenAIEmbeddings(openai_api_key="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")
-os.environ['OPENAI_API_KEY'] = "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"
+embeddings = OpenAIEmbeddings(openai_api_key="sk-")
+os.environ['OPENAI_API_KEY'] = "sk-"
 
 def process_file(file_path):
     if file_path.endswith(".txt"):
