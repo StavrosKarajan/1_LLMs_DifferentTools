@@ -137,23 +137,4 @@ async def main(message):
         await cb.final_stream.update()
     else:
         await cl.Message(content=answer, elements=source_elements).send()
-        
-        
-        
-'''
-This code is an implementation of a question-answering system uses Langchain library to process PDF files and answer questions based on their content. 
-Here's a breakdown of the code:
 
-The necessary modules are imported, including Langchain modules for loading documents, splitting text, creating embeddings, and building a vector database.
-The RecursiveCharacterTextSplitter is used to split the text from the documents into smaller chunks of 1000 characters each, with an overlap of 100 characters between chunks.
-The OpenAIEmbeddings class is used to embed the text chunks into vector space using the OpenAI embedding API.
-The Chroma class is used to create a vector database that stores the embedded text chunks and allows for efficient retrieval of relevant chunks based on vector similarity.
-The RetrievalQAWithSourcesChain class is used to create a question-answering chain that first retrieves relevant text chunks from the vector database, and then generates an answer to the user's question using the ChatOpenAI class.
-The chainlit module is used to create a user interface for the question-answering system.
-The process_file function takes a file as input, determines whether it is a text or PDF file, and then loads the file using the appropriate loader. The text is then split into smaller chunks using the RecursiveCharacterTextSplitter.
-The get_docsearch function processes the file using the process_file function and creates a vector database using the Chroma class.
-The start function is called when the chat session starts. It prompts the user to upload a file, processes the file, creates a vector database, and then creates a question-answering chain using the RetrievalQAWithSourcesChain class.
-The main function is called when a user sends a message. It uses the RetrievalQAWithSourcesChain class to generate an answer to the user's question and then sends the answer back to the user.
-The source_elements list is used to store the text elements that are referenced in the answer. These elements are then displayed to the user along with the answer.
-Overall, this code creates a system that can answer questions based on the content of PDF files, using natural language processing and vector embeddings to understand and retrieve relevant information.
-'''

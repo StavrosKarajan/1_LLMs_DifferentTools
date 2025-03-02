@@ -6,7 +6,7 @@ from langchain.agents.agent_types import AgentType
 from langchain.chat_models import ChatOpenAI
 import os
 
-os.environ['OPENAI_API_KEY']="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"
+os.environ['OPENAI_API_KEY']="sk-"
 
 agent_executor = create_python_agent(
     llm=OpenAI(temperature=0.5, max_tokens=2000),
