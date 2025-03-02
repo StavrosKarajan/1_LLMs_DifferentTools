@@ -6,7 +6,7 @@ import chainlit as cl
 from langchain.chat_models import ChatOpenAI
 from langchain.agents import load_tools, initialize_agent, AgentType
 import os
-os.environ['OPENAI_API_KEY']="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"
+os.environ['OPENAI_API_KEY']="sk-"
 
 
 

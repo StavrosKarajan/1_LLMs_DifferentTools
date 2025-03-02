@@ -1,7 +1,7 @@
 import os
 
 #pip install pypdf
-#export HNSWLIB_NO_NATIVE = 1
+#export HNSWLIB_NO_NATIVE = 1 The line export HNSWLIB_NO_NATIVE = 1 sets an environment variable HNSWLIB_NO_NATIVE to 1. This environment variable is used to disable the native implementation of HNSW (Hierarchical Navigable Small World) library in favor of the pure Python implementation.
 
 from langchain.document_loaders import PyPDFLoader, TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -10,18 +10,15 @@ from langchain.vectorstores import Chroma
 from langchain.chains import RetrievalQAWithSourcesChain
 from langchain.chat_models import ChatOpenAI
 import chainlit as cl
-from chainlit.types import AskFileResponse
+from  chainlit.types import AskFileResponse
 import os
 
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
 
-embeddings = OpenAIEmbeddings(openai_api_key="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")
-os.environ['OPENAI_API_KEY']="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"
+embeddings = OpenAIEmbeddings(openai_api_key="sk-")
+os.environ['OPENAI_API_KEY']="sk-"
 
-welcome_message = """Welcome to the Chainlit PDF QA demo! To get started:
-1. Upload a PDF or text file
-2. Ask a question about the file
-"""
+welcome_message = """Welcome to the QA demo!"""
 
 import tempfile
 
@@ -46,11 +43,6 @@ def process_file(file: AskFileResponse):
 
 
 
-
-
-
-
-
 def get_docsearch(file: AskFileResponse):
     docs = process_file(file)
 
@@ -67,8 +59,10 @@ def get_docsearch(file: AskFileResponse):
 
 @cl.on_chat_start
 async def start():
+    
     # Sending an image with the local file path
-    await cl.Message(content="You can now chat with your pdfs.").send()
+    await cl.Message(content="Chat with your Documents.").send()
+
     files = None
     while files is None:
         files = await cl.AskFileMessage(
@@ -87,13 +81,13 @@ async def start():
     docsearch = await cl.make_async(get_docsearch)(file)
 
     chain = RetrievalQAWithSourcesChain.from_chain_type(
-        ChatOpenAI(temperature=0, streaming=True),
+        ChatOpenAI(temperature=1, streaming=True),
         chain_type="stuff",
         retriever=docsearch.as_retriever(max_tokens_limit=4097),
     )
 
     # Let the user know that the system is ready
-    msg.content = f"`{file.name}` processed. You can now ask questions!"
+    msg.content = f"`{file.name}` processed. The system is READY🤖!"
     await msg.update()
 
     cl.user_session.set("chain", chain)
@@ -143,3 +137,23 @@ async def main(message):
         await cb.final_stream.update()
     else:
         await cl.Message(content=answer, elements=source_elements).send()
+        
+        
+        
+'''
+This code is an implementation of a question-answering system uses Langchain library to process PDF files and answer questions based on their content. 
+Here's a breakdown of the code:
+
+The necessary modules are imported, including Langchain modules for loading documents, splitting text, creating embeddings, and building a vector database.
+The RecursiveCharacterTextSplitter is used to split the text from the documents into smaller chunks of 1000 characters each, with an overlap of 100 characters between chunks.
+The OpenAIEmbeddings class is used to embed the text chunks into vector space using the OpenAI embedding API.
+The Chroma class is used to create a vector database that stores the embedded text chunks and allows for efficient retrieval of relevant chunks based on vector similarity.
+The RetrievalQAWithSourcesChain class is used to create a question-answering chain that first retrieves relevant text chunks from the vector database, and then generates an answer to the user's question using the ChatOpenAI class.
+The chainlit module is used to create a user interface for the question-answering system.
+The process_file function takes a file as input, determines whether it is a text or PDF file, and then loads the file using the appropriate loader. The text is then split into smaller chunks using the RecursiveCharacterTextSplitter.
+The get_docsearch function processes the file using the process_file function and creates a vector database using the Chroma class.
+The start function is called when the chat session starts. It prompts the user to upload a file, processes the file, creates a vector database, and then creates a question-answering chain using the RetrievalQAWithSourcesChain class.
+The main function is called when a user sends a message. It uses the RetrievalQAWithSourcesChain class to generate an answer to the user's question and then sends the answer back to the user.
+The source_elements list is used to store the text elements that are referenced in the answer. These elements are then displayed to the user along with the answer.
+Overall, this code creates a system that can answer questions based on the content of PDF files, using natural language processing and vector embeddings to understand and retrieve relevant information.
+'''
